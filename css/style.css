@@ -1,0 +1,1038 @@
+/* ==========================================================================
+   ONG Solidária — folha de estilos compartilhada
+   ========================================================================== */
+
+:root {
+  /* Cores — design system */
+  --cor-primaria: #2e7d32;
+  --cor-primaria-escura: #1b5e20;
+  --cor-secundaria: #f9a825;
+  --cor-texto: #263238;
+  --cor-texto-claro: #607d8b;
+  --cor-fundo: #fafaf7;
+  --cor-fundo-card: #ffffff;
+  --cor-borda: #e0e0e0;
+  --cor-erro: #c62828;
+  --cor-sucesso: #2e7d32;
+
+  /* Espaçamento — escala consistente em toda a interface */
+  --espacamento-minimo: 0.25rem;
+  --espacamento-pequeno: 0.5rem;
+  --espacamento-medio: 1rem;
+  --espacamento-grande: 2rem;
+  --espacamento-extra: 3rem;
+
+  /* Tipografia — escala modular reaproveitada nos títulos */
+  --fonte-base: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --texto-pequeno: 0.875rem;
+  --texto-base: 1rem;
+  --texto-medio: 1.125rem;
+  --texto-grande: clamp(1.4rem, 3vw, 1.75rem);
+  --texto-titulo: clamp(1.8rem, 4vw, 2.6rem);
+
+  /* Elevação, forma e movimento — reutilizados por botões, cartões e menu */
+  --border-radius: 10px;
+  --border-radius-pequeno: 6px;
+  --sombra-suave: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --sombra-media: 0 12px 28px rgba(0, 0, 0, 0.14);
+  --transicao-rapida: 0.2s ease;
+  --transicao-base: 0.3s ease;
+  --camada-cabecalho: 100;
+  --camada-menu-mobile: 90;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--cor-primaria-escura);
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   Sistema de Grid — 12 colunas
+   ==========================================================================
+   Base para o layout macroscópico das áreas de conteúdo (cartões
+   institucionais, estatísticas, lista de projetos). Cada região usa
+   .grid-12 no container e .col-span-N nos itens, com N somando 12 por linha
+   no cenário desktop. Os breakpoints redefinem apenas os col-span,
+   preservando a mesma malha de 12 colunas em qualquer resolução.
+   ========================================================================== */
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--espacamento-grande);
+}
+
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+.col-span-6 { grid-column: span 6; }
+.col-span-12 { grid-column: span 12; }
+
+/* ---------- Breakpoints padronizados do projeto ----------
+   1. até 480px  — mobile pequeno (smartphones em retrato)
+   2. até 640px  — mobile grande / phablets
+   3. até 768px  — tablets em retrato (aqui a navegação vira hambúrguer)
+   4. até 1024px — notebooks pequenos / tablets em paisagem
+   5. a partir de 1281px — desktops panorâmicos (widescreen)
+   ------------------------------------------------------------ */
+
+/* Breakpoint 5 — desktop panorâmico: aproveita a largura extra sem esticar
+   demais as linhas de texto. */
+@media (min-width: 1281px) {
+  .container {
+    width: min(1240px, 88%);
+  }
+
+  .grid-12 {
+    gap: var(--espacamento-extra);
+  }
+}
+
+/* Breakpoint 4 — notebooks pequenos / tablets em paisagem: 2 itens por
+   linha nas grades de 12 colunas. */
+@media (max-width: 1024px) {
+  .grade-cartoes .col-span-4 {
+    grid-column: span 6;
+  }
+
+  .estatisticas .col-span-3 {
+    grid-column: span 6;
+  }
+}
+
+/* Breakpoint 1 — mobile pequeno: aperta o gutter lateral e empilha os
+   botões do hero em largura total. */
+@media (max-width: 480px) {
+  .container {
+    width: min(100%, 94%);
+  }
+
+  .grid-12 {
+    gap: var(--espacamento-medio);
+  }
+
+  .hero__acoes .botao {
+    width: 100%;
+  }
+}
+
+/* Pular para o conteúdo — acessibilidade via teclado */
+.pular-para-conteudo {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--cor-primaria);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+  border-radius: 0 0 8px 0;
+}
+
+.pular-para-conteudo:focus {
+  left: 0;
+}
+
+/* ---------- Cabeçalho e navegação ---------- */
+.cabecalho-site {
+  background-color: var(--cor-fundo-card);
+  border-bottom: 1px solid var(--cor-borda);
+  position: sticky;
+  top: 0;
+  z-index: var(--camada-cabecalho);
+}
+
+.cabecalho-site .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--espacamento-medio);
+  flex-wrap: wrap;
+  gap: var(--espacamento-medio);
+  position: relative;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--cor-primaria-escura);
+  text-decoration: none;
+}
+
+.marca__icone {
+  font-size: 1.6rem;
+}
+
+/* Botão hambúrguer — visível apenas em telas estreitas (ver media query) */
+.menu-alternar {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--border-radius-pequeno);
+  background: transparent;
+  cursor: pointer;
+  order: 2;
+}
+
+.menu-alternar:hover,
+.menu-alternar:focus-visible {
+  background-color: #f0f4ef;
+  outline: none;
+}
+
+.menu-alternar__linha {
+  display: block;
+  width: 24px;
+  height: 3px;
+  margin-inline: auto;
+  background-color: var(--cor-primaria-escura);
+  border-radius: 3px;
+  transition: transform var(--transicao-base), opacity var(--transicao-base);
+}
+
+.menu-alternar[aria-expanded="true"] .menu-alternar__linha:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-alternar[aria-expanded="true"] .menu-alternar__linha:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-alternar[aria-expanded="true"] .menu-alternar__linha:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.navegacao-principal {
+  order: 1;
+}
+
+.navegacao-principal ul {
+  list-style: none;
+  display: flex;
+  gap: var(--espacamento-grande);
+  margin: 0;
+  padding: 0;
+}
+
+.navegacao-principal a {
+  text-decoration: none;
+  color: var(--cor-texto);
+  font-weight: 600;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.navegacao-principal a:hover,
+.navegacao-principal a:focus,
+.navegacao-principal a[aria-current="page"] {
+  color: var(--cor-primaria-escura);
+  border-color: var(--cor-primaria);
+}
+
+/* ---------- Submenu em dropdown (item "Projetos") ---------- */
+.tem-submenu {
+  position: relative;
+}
+
+.tem-submenu > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.seta-submenu {
+  font-size: 0.7rem;
+  transition: transform var(--transicao-rapida);
+}
+
+/* Em telas largas, o submenu fica absolutamente posicionado e oculto por
+   padrão — display:none o remove por completo da árvore de acessibilidade
+   até que o item pai receba hover ou foco via teclado. */
+.tem-submenu .submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  background: var(--cor-fundo-card);
+  border-radius: var(--border-radius-pequeno);
+  box-shadow: var(--sombra-media);
+  z-index: var(--camada-menu-mobile);
+}
+
+/* :hover cobre o mouse; :focus-within mantém o submenu aberto enquanto o
+   foco de teclado estiver em qualquer link dentro dele (Tab). */
+.tem-submenu:hover .submenu,
+.tem-submenu:focus-within .submenu {
+  display: block;
+}
+
+.tem-submenu:hover .seta-submenu,
+.tem-submenu:focus-within .seta-submenu {
+  transform: rotate(180deg);
+}
+
+.submenu a {
+  display: block;
+  padding: 0.6rem 1rem;
+  border-bottom: none;
+  color: var(--cor-texto);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.submenu a:hover,
+.submenu a:focus {
+  background-color: #f0f4ef;
+  color: var(--cor-primaria-escura);
+}
+
+/* Breakpoint 3 — tablets em retrato: navegação vira hambúrguer, hero
+   passa para uma única coluna e as grades de 12 colunas empilham (span 12). */
+@media (max-width: 768px) {
+  .menu-alternar {
+    display: flex;
+  }
+
+  .navegacao-principal {
+    order: 3;
+    width: 100%;
+  }
+
+  .navegacao-principal ul {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height var(--transicao-base), opacity var(--transicao-base);
+  }
+
+  .navegacao-principal ul.aberta {
+    max-height: 320px;
+    opacity: 1;
+    padding-block: var(--espacamento-pequeno) var(--espacamento-medio);
+  }
+
+  .navegacao-principal ul li {
+    border-top: 1px solid var(--cor-borda);
+  }
+
+  .navegacao-principal a {
+    display: block;
+    padding: var(--espacamento-medio) var(--espacamento-pequeno);
+    border-bottom: none;
+    border-left: 3px solid transparent;
+  }
+
+  .navegacao-principal a:hover,
+  .navegacao-principal a:focus,
+  .navegacao-principal a[aria-current="page"] {
+    border-left-color: var(--cor-primaria);
+    background-color: #f0f4ef;
+  }
+
+  /* No mobile o submenu deixa de ser dropdown flutuante: passa a ficar
+     sempre visível em fluxo normal, "embutido" no próprio acordeão do
+     menu principal (max-height do <ul> pai já foi ampliado abaixo). */
+  .navegacao-principal ul.aberta {
+    max-height: 720px;
+  }
+
+  .tem-submenu .submenu {
+    display: block;
+    position: static;
+    box-shadow: none;
+    border-radius: 0;
+    padding-left: var(--espacamento-medio);
+    background-color: #f7faf6;
+  }
+
+  .seta-submenu {
+    display: none;
+  }
+
+  .hero .container {
+    grid-template-columns: 1fr;
+  }
+
+  .grade-cartoes .col-span-4,
+  .estatisticas .col-span-3 {
+    grid-column: span 12;
+  }
+}
+
+/* ---------- Herói ---------- */
+.hero {
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+  color: #fff;
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.hero .container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--espacamento-grande);
+  align-items: center;
+}
+
+.hero__conteudo h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin-top: 0;
+}
+
+.hero__conteudo p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.hero__acoes {
+  display: flex;
+  gap: var(--espacamento-medio);
+  flex-wrap: wrap;
+}
+
+.hero__figura {
+  margin: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--border-radius);
+  padding: var(--espacamento-medio);
+}
+
+.hero__figura img {
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--border-radius) - 4px);
+}
+
+/* ---------- Botões ---------- */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--transicao-rapida), box-shadow var(--transicao-rapida), background-color var(--transicao-rapida), opacity var(--transicao-rapida);
+}
+
+/* Estado disabled — genérico para qualquer variante de botão. */
+.botao:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.botao-primario {
+  background-color: var(--cor-secundaria);
+  color: var(--cor-texto);
+}
+
+.botao-primario:hover,
+.botao-primario:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(249, 168, 37, 0.4);
+}
+
+.botao-primario:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(249, 168, 37, 0.35);
+}
+
+.botao-secundario {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.botao-secundario:hover,
+.botao-secundario:focus-visible {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.botao-secundario:active {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+.botao-enviar {
+  background-color: var(--cor-primaria);
+  color: #fff;
+  width: 100%;
+}
+
+.botao-enviar:hover,
+.botao-enviar:focus-visible {
+  background-color: var(--cor-primaria-escura);
+}
+
+.botao-enviar:active {
+  background-color: var(--cor-primaria-escura);
+  transform: scale(0.99);
+}
+
+.botao-enviar:disabled {
+  background-color: #a5a5a5;
+}
+
+/* ---------- Seções gerais ---------- */
+section {
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.secao__titulo {
+  text-align: center;
+  margin-bottom: var(--espacamento-grande);
+}
+
+.secao__titulo h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--cor-primaria-escura);
+}
+
+.secao__titulo p {
+  color: var(--cor-texto-claro);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.secao-alternada {
+  background-color: #f0f4ef;
+}
+
+/* ---------- Cartões / grade ---------- */
+/* .grade-cartoes usa a malha de 12 colunas (.grid-12) definida no início do
+   arquivo; aqui fica só como seletor de escopo para os breakpoints abaixo. */
+
+.cartao {
+  background: var(--cor-fundo-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--sombra-suave);
+  padding: var(--espacamento-grande);
+  border-top: 4px solid var(--cor-primaria);
+  transition: transform var(--transicao-base), box-shadow var(--transicao-base);
+}
+
+.cartao:hover,
+.cartao:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-media);
+}
+
+.cartao__icone {
+  font-size: 2rem;
+  margin-bottom: var(--espacamento-pequeno);
+}
+
+.cartao h3 {
+  margin-top: 0;
+  color: var(--cor-primaria-escura);
+}
+
+/* ---------- Estatísticas ---------- */
+/* .estatisticas também usa a malha de 12 colunas (.grid-12); os itens
+   recebem col-span-3 no HTML (4 itens × 3 colunas = 12). */
+.estatisticas {
+  text-align: center;
+}
+
+.estatisticas dt {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cor-secundaria);
+}
+
+.estatisticas dd {
+  margin: 0;
+  color: var(--cor-texto-claro);
+}
+
+/* ---------- Artigos de projetos ---------- */
+/* .lista-projetos também usa a malha de 12 colunas (.grid-12); cada
+   .projeto recebe col-span-12 (uma faixa cheia por linha). */
+
+.projeto {
+  background: var(--cor-fundo-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--sombra-suave);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  transition: box-shadow var(--transicao-base);
+}
+
+.projeto:hover,
+.projeto:focus-within {
+  box-shadow: var(--sombra-media);
+}
+
+.projeto__figura {
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  color: #fff;
+}
+
+.projeto__corpo {
+  padding: var(--espacamento-grande);
+}
+
+.projeto__meta {
+  display: flex;
+  gap: var(--espacamento-medio);
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: var(--cor-texto-claro);
+  margin-bottom: var(--espacamento-pequeno);
+}
+
+.selo {
+  display: inline-block;
+  background-color: #e8f5e9;
+  color: var(--cor-primaria-escura);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Breakpoint 2 — mobile grande: o card de projeto (imagem + texto lado a
+   lado) empilha em uma única coluna para não espremer o conteúdo. */
+@media (max-width: 640px) {
+  .projeto {
+    grid-template-columns: 1fr;
+  }
+
+  .projeto__figura {
+    min-height: 120px;
+  }
+}
+
+/* ---------- Formulário ---------- */
+.secao-formulario .container {
+  max-width: 720px;
+}
+
+.formulario {
+  background: var(--cor-fundo-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--sombra-suave);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+fieldset {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--border-radius);
+  padding: var(--espacamento-grande);
+  margin: 0 0 var(--espacamento-grande);
+}
+
+legend {
+  font-weight: 700;
+  color: var(--cor-primaria-escura);
+  padding-inline: 0.5rem;
+}
+
+.campo {
+  margin-bottom: var(--espacamento-medio);
+}
+
+.campo label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.obrigatorio {
+  color: var(--cor-erro);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--cor-borda);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+.campo input:valid:not(:placeholder-shown) {
+  border-color: var(--cor-sucesso);
+}
+
+.campo input:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: var(--cor-erro);
+}
+
+.texto-ajuda {
+  font-size: 0.85rem;
+  color: var(--cor-texto-claro);
+  margin-top: 0.3rem;
+}
+
+.mensagem-erro {
+  font-size: 0.85rem;
+  color: var(--cor-erro);
+  margin-top: 0.3rem;
+  min-height: 1.1em;
+}
+
+.linha-campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--espacamento-medio);
+}
+
+.grupo-radio,
+.grupo-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacamento-medio);
+}
+
+.opcao-radio,
+.opcao-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 400;
+}
+
+.opcao-checkbox input,
+.opcao-radio input {
+  width: auto;
+}
+
+.aviso-formulario {
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  margin-bottom: var(--espacamento-medio);
+  font-weight: 600;
+  display: none;
+}
+
+.aviso-formulario.visivel {
+  display: block;
+}
+
+.aviso-formulario.sucesso {
+  background-color: #e8f5e9;
+  color: var(--cor-sucesso);
+}
+
+.aviso-formulario.erro {
+  background-color: #fdecea;
+  color: var(--cor-erro);
+}
+
+/* ---------- Rodapé ---------- */
+.rodape-site {
+  background-color: #1b2a1c;
+  color: #d7e4d8;
+  padding-block: var(--espacamento-grande);
+  margin-top: var(--espacamento-grande);
+}
+
+.rodape-site .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacamento-medio);
+}
+
+.rodape-site a {
+  color: #fff;
+}
+
+.rodape-site small {
+  color: #9db19f;
+}
+
+/* ==========================================================================
+   Componentes de feedback: modal e toast
+   ========================================================================== */
+
+/* Link estilizado como texto, mas semanticamente um <button> (abre modal). */
+.link-modal {
+  display: inline-block;
+  margin-top: 0.3rem;
+  margin-left: 1.7rem;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--texto-pequeno);
+  color: var(--cor-primaria-escura);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-modal:hover,
+.link-modal:focus-visible {
+  color: var(--cor-primaria);
+}
+
+/* ---------- Modal ---------- */
+.sobreposicao-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 30, 20, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacamento-medio);
+  z-index: 1000;
+  animation: modal-esmaecer var(--transicao-base) ease;
+}
+
+.sobreposicao-modal[hidden] {
+  display: none;
+}
+
+.modal {
+  background: var(--cor-fundo-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--sombra-media);
+  width: min(560px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: modal-subir var(--transicao-base) ease;
+}
+
+.modal__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacamento-medio);
+  padding: var(--espacamento-medio) var(--espacamento-grande);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.modal__cabecalho h2 {
+  margin: 0;
+  font-size: var(--texto-medio);
+  color: var(--cor-primaria-escura);
+}
+
+.modal__fechar {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--cor-texto-claro);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-pequeno);
+  transition: background-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.modal__fechar:hover,
+.modal__fechar:focus-visible {
+  background-color: #f0f4ef;
+  color: var(--cor-erro);
+}
+
+.modal__corpo {
+  padding: var(--espacamento-grande);
+}
+
+.modal__corpo li {
+  margin-bottom: var(--espacamento-pequeno);
+}
+
+.modal__rodape {
+  padding: var(--espacamento-medio) var(--espacamento-grande) var(--espacamento-grande);
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes modal-esmaecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-subir {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Toast ---------- */
+.toast-container {
+  position: fixed;
+  right: var(--espacamento-medio);
+  bottom: var(--espacamento-medio);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacamento-pequeno);
+  z-index: 1100;
+  max-width: min(360px, calc(100vw - 2 * var(--espacamento-medio)));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: var(--espacamento-medio);
+  border-radius: var(--border-radius-pequeno);
+  box-shadow: var(--sombra-media);
+  background: var(--cor-fundo-card);
+  border-left: 4px solid var(--cor-primaria);
+  color: var(--cor-texto);
+  animation: toast-entrar var(--transicao-base) ease;
+}
+
+.toast.saindo {
+  animation: toast-sair var(--transicao-base) ease forwards;
+}
+
+.toast--sucesso {
+  border-left-color: var(--cor-sucesso);
+}
+
+.toast--erro {
+  border-left-color: var(--cor-erro);
+}
+
+.toast__icone {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.toast__texto {
+  font-size: var(--texto-pequeno);
+  line-height: 1.4;
+}
+
+@keyframes toast-entrar {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-sair {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(24px); }
+}
+
+/* ==========================================================================
+   Gráfico de impacto (Chart.js)
+   ========================================================================== */
+
+.grafico-impacto__wrapper {
+  margin-top: var(--espacamento-grande);
+  background-color: var(--cor-fundo-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--border-radius);
+  padding: var(--espacamento-medio) var(--espacamento-grande);
+}
+
+.grafico-impacto__titulo {
+  font-size: var(--texto-medio);
+  color: var(--cor-primaria-escura);
+  margin-bottom: var(--espacamento-medio);
+  text-align: center;
+}
+
+#grafico-impacto {
+  max-height: 320px;
+}
+
+/* ==========================================================================
+   SPA — rascunho de formulário e histórico salvos no navegador
+   ========================================================================== */
+
+.aviso-rascunho {
+  background-color: #fff8e1;
+  border: 1px solid var(--cor-secundaria);
+  border-radius: var(--border-radius-pequeno);
+  padding: var(--espacamento-pequeno) var(--espacamento-medio);
+  margin-bottom: var(--espacamento-medio);
+  font-size: var(--texto-pequeno);
+  color: var(--cor-texto);
+}
+
+.aviso-rascunho[hidden] {
+  display: none;
+}
+
+.cadastros-salvos {
+  margin-top: var(--espacamento-grande);
+  padding-top: var(--espacamento-grande);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.cadastros-salvos h2 {
+  font-size: var(--texto-medio);
+  color: var(--cor-primaria-escura);
+  margin-bottom: var(--espacamento-minimo);
+}
+
+.cadastros-salvos ul {
+  list-style: none;
+  padding: 0;
+  margin: var(--espacamento-pequeno) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacamento-minimo);
+}
+
+.cadastros-salvos li {
+  background-color: var(--cor-fundo-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--border-radius-pequeno);
+  padding: var(--espacamento-pequeno) var(--espacamento-medio);
+  font-size: var(--texto-pequeno);
+}
+
+/* ---------- Badges (selos) ---------- */
+/* .selo já define a badge de categorização semântica (ver seção de
+   Artigos de projetos); reaproveitada aqui como referência do padrão
+   visual: fundo suave + texto colorido + border-radius total (pílula). */
