@@ -1,0 +1,65 @@
+/**
+ * ONG Solidária — módulo de dados.
+ *
+ * Fonte única dos projetos exibidos na rota /projetos. Mantendo os dados
+ * separados do template, qualquer alteração de conteúdo (novo projeto,
+ * texto atualizado) acontece em um único lugar, sem tocar em HTML.
+ */
+
+export const projetos = [
+  {
+    slug: "mesa-solidaria",
+    icone: "🍲",
+    selo: "Em andamento",
+    dataIso: "2026-02-01",
+    dataTexto: "desde fevereiro de 2026",
+    titulo: "Mesa Solidária",
+    voluntariosAtivos: 62,
+    descricao:
+      "Distribuição semanal de cestas básicas e refeições quentes para famílias em situação de insegurança alimentar na região central de Jundiaí. Já são mais de 600 famílias atendidas por mês.",
+  },
+  {
+    slug: "reforco-escolar",
+    icone: "📚",
+    selo: "Em andamento",
+    dataIso: "2023-08-01",
+    dataTexto: "desde agosto de 2023",
+    titulo: "Reforço Escolar Comunitário",
+    voluntariosAtivos: 41,
+    descricao:
+      "Aulas de reforço em português e matemática para crianças de 7 a 12 anos, com voluntários formados em pedagogia e licenciaturas, em parceria com escolas municipais.",
+  },
+  {
+    slug: "saude-itinerante",
+    icone: "🩺",
+    selo: "Em andamento",
+    dataIso: "2024-05-01",
+    dataTexto: "desde maio de 2024",
+    titulo: "Saúde Itinerante",
+    voluntariosAtivos: 28,
+    descricao:
+      "Mutirões mensais de orientação em saúde básica, aferição de pressão e glicemia, e encaminhamento à rede pública para moradores de áreas com difícil acesso a postos de saúde.",
+  },
+  {
+    slug: "reforma-com-amor",
+    icone: "🏠",
+    selo: "Novo",
+    dataIso: "2026-06-01",
+    dataTexto: "desde junho de 2026",
+    titulo: "Reforma com Amor",
+    voluntariosAtivos: 19,
+    descricao:
+      "Pequenos reparos e reformas em residências de idosos e famílias de baixa renda, realizados por voluntários da construção civil parceiros da ONG.",
+  },
+];
+
+/** Opções de área de interesse do formulário, derivadas dos projetos. */
+export function opcoesAreaInteresse() {
+  const mapa = {
+    "mesa-solidaria": "Mesa Solidária (alimentação)",
+    "reforco-escolar": "Reforço Escolar Comunitário",
+    "saude-itinerante": "Saúde Itinerante",
+    "reforma-com-amor": "Reforma com Amor",
+  };
+  return projetos.map((p) => ({ valor: p.slug, rotulo: mapa[p.slug] || p.titulo }));
+}
