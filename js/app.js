@@ -1,0 +1,1 @@
+import{iniciarRoteador as t}from"./router.js";document.addEventListener("DOMContentLoaded",function(){!function(){const t=document.getElementById("link-pular"),e=document.getElementById("app");t&&e&&t.addEventListener("click",function(t){t.preventDefault(),e.hasAttribute("tabindex")||e.setAttribute("tabindex","-1"),e.focus()})}(),t()});
