@@ -8,7 +8,10 @@
   --cor-primaria-escura: #1b5e20;
   --cor-secundaria: #f9a825;
   --cor-texto: #263238;
-  --cor-texto-claro: #607d8b;
+  /* Escurecido de #607d8b para #56717d: o tom original dava 4.37:1 contra
+     fundo branco (abaixo do mínimo 4.5:1 da WCAG 2.1 AA, critério 1.4.3),
+     achado em auditoria de acessibilidade real com Playwright. */
+  --cor-texto-claro: #56717d;
   --cor-fundo: #fafaf7;
   --cor-fundo-card: #ffffff;
   --cor-borda: #e0e0e0;
@@ -241,10 +244,15 @@ a {
 }
 
 .navegacao-principal a {
+  /* padding-block ampliado (0.25rem -> 0.6rem): a área de toque original
+     media ~42x27px, abaixo do recomendado para alvos de toque (não é
+     requisito da WCAG 2.1 AA, mas é uma boa prática barata de aplicar). */
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
   color: var(--cor-texto);
   font-weight: 600;
-  padding-block: 0.25rem;
+  padding-block: 0.6rem;
   border-bottom: 2px solid transparent;
   transition: border-color var(--transicao-rapida), color var(--transicao-rapida);
 }
@@ -864,6 +872,13 @@ legend {
 }
 
 .modal__fechar {
+  /* min-width/min-height 44px: achado em auditoria de acessibilidade —
+     o botão media 30x32px, abaixo da área de toque recomendada. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   background: none;
   border: none;
   font-size: 1.5rem;
