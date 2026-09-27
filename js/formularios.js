@@ -92,6 +92,25 @@ function configurarValidacaoCPF(campo) {
   });
 }
 
+/**
+ * Falha encontrada em sessão de validação: o atributo `required` nativo só
+ * verifica se value.length > 0, então um campo preenchido só com espaços
+ * (ex.: "     ") passava no checkValidity() como se fosse um nome/cidade de
+ * verdade. Afeta apenas campos de texto livre obrigatórios SEM pattern
+ * próprio (nome e cidade) — os demais (cpf, telefone, cep, email) já
+ * rejeitam espaços-only pelo seu próprio pattern/type/algoritmo.
+ */
+function configurarValidacaoDeEspacosEmBranco(formulario) {
+  ["nome", "cidade"].forEach((idCampo) => {
+    const campo = formulario.querySelector(`#${idCampo}`);
+    if (!campo) return;
+    campo.addEventListener("input", function () {
+      const somenteEspacos = campo.value.length > 0 && campo.value.trim() === "";
+      campo.setCustomValidity(somenteEspacos ? "Este campo não pode conter apenas espaços em branco." : "");
+    });
+  });
+}
+
 function configurarMensagensDeErro(formulario) {
   const campos = formulario.querySelectorAll("input, select");
   campos.forEach((campo) => {
@@ -251,6 +270,7 @@ export function initCadastro(raiz) {
   if (campoTelefone) aplicarMascara(campoTelefone, formatarTelefone, 11);
   if (campoCEP) aplicarMascara(campoCEP, formatarCEP, 8);
 
+  configurarValidacaoDeEspacosEmBranco(formulario);
   configurarMensagensDeErro(formulario);
   restaurarRascunho(formulario, avisoRascunho);
   const cancelarAutosalvamentoPendente = configurarAutosalvamentoDeRascunho(formulario);
