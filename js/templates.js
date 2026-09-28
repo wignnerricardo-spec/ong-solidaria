@@ -36,6 +36,7 @@ export function renderHome() {
         <figure class="hero__figura">
           <picture>
             <source srcset="../imagens/voluntarios-mesa-solidaria.svg" type="image/svg+xml">
+            <source srcset="../imagens/voluntarios-mesa-solidaria.webp" type="image/webp">
             <img
               src="../imagens/voluntarios-mesa-solidaria.png"
               alt="Três voluntários da ONG Mãos que Ajudam organizando caixas de doação sobre uma mesa, prontos para distribuição à comunidade"
