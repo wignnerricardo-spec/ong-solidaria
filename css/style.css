@@ -17,6 +17,20 @@
   --cor-borda: #e0e0e0;
   --cor-erro: #c62828;
   --cor-sucesso: #2e7d32;
+  /* Token semântico separado de --cor-primaria-escura: usado só como COR DE
+     TEXTO (títulos, links, valores em destaque) sobre --cor-fundo-card. No
+     tema claro tem o mesmo valor de --cor-primaria-escura; no modo escuro é
+     redefinido para um verde mais claro, porque o verde escuro original não
+     tem contraste suficiente sobre um fundo de cartão escuro. Mantém
+     --cor-primaria-escura livre para continuar sendo usado como cor de
+     FUNDO (hover de botões) nos dois temas, sem qualquer conflito. */
+  --cor-texto-acento: var(--cor-primaria-escura);
+  /* Cor de texto fixa (não muda no modo escuro) para ficar sobre fundos de
+     acento vibrantes como --cor-secundaria (botão primário): --cor-secundaria
+     continua clara nos dois temas, então o texto sobre ela também precisa
+     continuar escuro nos dois temas — diferente de --cor-texto, que fica
+     claro no modo escuro para o texto de página comum. */
+  --cor-texto-sobre-acento: #1a1a1a;
 
   /* Espaçamento — escala consistente em toda a interface */
   --espacamento-minimo: 0.25rem;
@@ -62,7 +76,7 @@ img {
 }
 
 a {
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
 }
 
 .container {
@@ -179,7 +193,7 @@ a {
   gap: 0.6rem;
   font-weight: 700;
   font-size: 1.25rem;
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   text-decoration: none;
 }
 
@@ -270,7 +284,7 @@ a {
 .navegacao-principal a:hover,
 .navegacao-principal a:focus,
 .navegacao-principal a[aria-current="page"] {
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   border-color: var(--cor-primaria);
 }
 
@@ -332,7 +346,7 @@ a {
 .submenu a:hover,
 .submenu a:focus {
   background-color: #f0f4ef;
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
 }
 
 /* Breakpoint 3 — tablets em retrato: navegação vira hambúrguer, hero
@@ -480,7 +494,7 @@ a {
 
 .botao-primario {
   background-color: var(--cor-secundaria);
-  color: var(--cor-texto);
+  color: var(--cor-texto-sobre-acento);
 }
 
 .botao-primario:hover,
@@ -541,7 +555,7 @@ section {
 
 .secao__titulo h2 {
   font-size: clamp(1.5rem, 3vw, 2rem);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
 }
 
 .secao__titulo p {
@@ -580,7 +594,7 @@ section {
 
 .cartao h3 {
   margin-top: 0;
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
 }
 
 /* ---------- Estatísticas ---------- */
@@ -645,7 +659,7 @@ section {
 .selo {
   display: inline-block;
   background-color: #e8f5e9;
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   padding: 0.2rem 0.7rem;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -685,7 +699,7 @@ fieldset {
 
 legend {
   font-weight: 700;
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   padding-inline: 0.5rem;
 }
 
@@ -712,6 +726,11 @@ legend {
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
+  /* Sem isto, o campo herdava o branco/preto padrão do navegador e não
+     acompanhava o tema: no modo escuro virava uma "ilha branca" no meio da
+     página escura. Achado ao testar o modo escuro com Playwright. */
+  background-color: var(--cor-fundo-card);
+  color: var(--cor-texto);
   transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
 }
 
@@ -829,7 +848,7 @@ legend {
   padding: 0;
   font: inherit;
   font-size: var(--texto-pequeno);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -878,7 +897,7 @@ legend {
 .modal__cabecalho h2 {
   margin: 0;
   font-size: var(--texto-medio);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
 }
 
 .modal__fechar {
@@ -1001,7 +1020,7 @@ legend {
 
 .grafico-impacto__titulo {
   font-size: var(--texto-medio);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   margin-bottom: var(--espacamento-medio);
   text-align: center;
 }
@@ -1036,7 +1055,7 @@ legend {
 
 .cadastros-salvos h2 {
   font-size: var(--texto-medio);
-  color: var(--cor-primaria-escura);
+  color: var(--cor-texto-acento);
   margin-bottom: var(--espacamento-minimo);
 }
 
@@ -1061,3 +1080,49 @@ legend {
 /* .selo já define a badge de categorização semântica (ver seção de
    Artigos de projetos); reaproveitada aqui como referência do padrão
    visual: fundo suave + texto colorido + border-radius total (pílula). */
+
+/* ==========================================================================
+   Modo escuro — perfil cromático adaptável
+   ==========================================================================
+   Estratégia: os tokens de superfície e de texto (--cor-fundo,
+   --cor-fundo-card, --cor-texto, --cor-texto-claro, --cor-borda,
+   --cor-texto-acento, --cor-erro, --cor-sucesso) já são usados em toda a
+   folha de estilo em vez de valores fixos, então redefini-los aqui dentro
+   de @media (prefers-color-scheme: dark) basta para repintar a aplicação
+   inteira — nenhum outro seletor precisa saber que o tema mudou. Segue a
+   preferência de sistema do usuário automaticamente (sem alternância manual
+   nesta versão). Todos os pares texto/fundo abaixo foram recalculados com a
+   fórmula de luminância relativa do WCAG e ficam entre 7:1 e 16:1 (acima do
+   mínimo de 4.5:1 da AA), verificado com Playwright.
+
+   --cor-primaria, --cor-primaria-escura e --cor-secundaria NÃO são
+   redefinidas: continuam servindo de FUNDO de botões/hero/rodapé nos dois
+   temas (superfícies coloridas que não precisam inverter), o que é o motivo
+   de existir o token --cor-texto-acento — ele isola o uso de
+   --cor-primaria-escura como COR DE TEXTO sobre --cor-fundo-card, que
+   precisa de um verde mais claro no escuro, sem afetar os usos dela como
+   fundo. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #121212;
+    --cor-fundo-card: #1e1e1e;
+    --cor-texto: #eceff1;
+    --cor-texto-claro: #b0bec5;
+    --cor-borda: #37474f;
+    --cor-texto-acento: #81c784;
+    --cor-erro: #ef9a9a;
+    --cor-sucesso: #81c784;
+  }
+
+  /* Estes dois avisos usam um fundo pastel fixo (não é --cor-fundo-card),
+     pensado para contrastar com texto escuro; no tema escuro o pastel vira
+     um verde/vermelho translúcido sobre o cartão escuro, mantendo a mesma
+     leitura de "sucesso" / "erro" com o novo --cor-sucesso/--cor-erro claro. */
+  .aviso-formulario.sucesso {
+    background-color: rgba(129, 199, 132, 0.16);
+  }
+
+  .aviso-formulario.erro {
+    background-color: rgba(239, 154, 154, 0.16);
+  }
+}
