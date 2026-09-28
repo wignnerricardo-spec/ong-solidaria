@@ -1,0 +1,42 @@
+name: Build e deploy (GitHub Pages)
+
+# Gera o build de produção a cada push em main (ou seja, a cada release
+# mesclada de develop) e publica automaticamente no branch gh-pages, que o
+# GitHub Pages já está configurado para servir (Settings -> Pages -> Deploy
+# from a branch -> gh-pages). Isto fecha o ciclo de CI/CD: da tag de release
+# em main até o site em produção, sem passo manual.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-e-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependências de build
+        run: npm ci
+
+      - name: Gerar build de produção
+        run: npm run build
+
+      - name: Publicar em gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "build: deploy automático via CI/CD (${{ github.sha }})"

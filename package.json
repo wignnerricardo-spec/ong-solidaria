@@ -1,0 +1,14 @@
+{
+  "name": "ong-solidaria",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build de produção do site da ONG Mãos que Ajudam",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "clean-css": "5.3.3",
+    "html-minifier-terser": "7.2.0",
+    "terser": "5.51.2"
+  }
+}
