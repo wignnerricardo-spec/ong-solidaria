@@ -203,10 +203,20 @@ a {
   order: 2;
 }
 
-.menu-alternar:hover,
-.menu-alternar:focus-visible {
+.menu-alternar:hover {
   background-color: #f0f4ef;
+}
+
+/* Achado em auditoria de acessibilidade: o :focus-visible deste botão só
+   trocava o fundo para #f0f4ef sobre um cabeçalho branco (#ffffff) — cerca
+   de 1:1 de contraste, ou seja, o indicador de foco era praticamente
+   invisível ao navegar por teclado (WCAG 2.1 AA, 2.4.7). Substituído por um
+   anel de foco visível (box-shadow), no mesmo padrão já usado nos campos do
+   formulário e nos botões primário/secundário. */
+.menu-alternar:focus-visible {
   outline: none;
+  background-color: #f0f4ef;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.45);
 }
 
 .menu-alternar__linha {
